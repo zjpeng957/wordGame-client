@@ -78,28 +78,33 @@ bool challenger::solve(string puzzle)
 
 bool challenger::rank(string n, Mode m)
 {
+	
 	if (m == CHALLENGE)
 	{
 		int lr = 0, pr = 0, er = 0, i = 0;
-		for (; i < cLevelRanking.size() && (lr == 0 || pr == 0 || er == 0); i++)
+		/*for (; i < cLevelRanking.size() && (lr == 0 || pr == 0 || er == 0); i++)
 		{
 			if (cLevelRanking[i] == n) lr = i + 1;
 			if (passRanking[i] == n) pr = i + 1;
 			if (expRanking[i] == n) er = i + 1;
 		}
-		if (lr == 0 || pr == 0 || er == 0) return false;
+		if (lr == 0 || pr == 0 || er == 0) return false;*/
+		recv(currentSocket, recvbuf, DEFAULT_BUFLEN, 0);
+		sscanf(recvbuf, "%d %d %d", &lr, &pr, &er);
 		cout << "属性\t" << "等级\t" << "关卡\t" << "经验\t" << endl;
 		cout << "排名\t" << lr << "\t" << pr << "\t" << er << "\t" << endl;
 	}
 	else
 	{
 		int lr = 0, wr=0, i = 0;
-		for (; i < dLevelRanking.size() && (lr == 0 || wr == 0); i++)
+		/*for (; i < dLevelRanking.size() && (lr == 0 || wr == 0); i++)
 		{
 			if (dLevelRanking[i] == n) lr = i + 1;
 			if (puzzleRanking[i] == n) wr = i + 1;
 		}
-		if (lr == 0 || wr == 0) return false;
+		if (lr == 0 || wr == 0) return false;*/
+		recv(currentSocket, recvbuf, DEFAULT_BUFLEN, 0);
+		sscanf(recvbuf, "%d %d", &lr, &wr);
 		cout << "属性\t" << "等级\t" << "出题数\t" << endl;
 		cout << "排名\t" << lr << "\t" << wr << "\t" << endl;
 	}
@@ -108,11 +113,17 @@ bool challenger::rank(string n, Mode m)
 
 bool challenger::showInfo()
 {
+	char n[20];
+	int l, p, e;
 	cout << "姓名\t" << "等级\t" << "闯关数\t" << "经验" << endl;
-	cout << name << "\t" << level << "\t" << pass << "\t" << exp << "\t" << endl;
+	
+	recv(currentSocket, recvbuf, DEFAULT_BUFLEN, 0);
+	sscanf(recvbuf, "%s %d %d %d", n, &l, &p, &e);
+	cout << n << "\t" << l << "\t" << p << "\t" << e << "\t" << endl;
+
 	cout << endl;
 
-	rank(name, CHALLENGE);
+	rank(n, CHALLENGE);
 	cout << "**************************************************************" << endl;
 	return true;
 }
@@ -207,26 +218,30 @@ bool designer::rank(string n, Mode m)
 	if (m == CHALLENGE)
 	{
 		int lr = 0, pr = 0, er = 0, i = 0;
-		for (; i < cLevelRanking.size() && (lr == 0 || pr == 0 || er == 0); i++)
+		/*for (; i < cLevelRanking.size() && (lr == 0 || pr == 0 || er == 0); i++)
 		{
-			if (cLevelRanking[i] == n) lr = i + 1;
-			if (passRanking[i] == n) pr = i + 1;
-			if (expRanking[i] == n) er = i + 1;
+		if (cLevelRanking[i] == n) lr = i + 1;
+		if (passRanking[i] == n) pr = i + 1;
+		if (expRanking[i] == n) er = i + 1;
 		}
-		if (lr == 0 || pr == 0 || er == 0) return false;
-		cout  << "属性\t" << "等级\t" << "关卡\t" << "经验\t" << endl;
+		if (lr == 0 || pr == 0 || er == 0) return false;*/
+		recv(currentSocket, recvbuf, DEFAULT_BUFLEN, 0);
+		sscanf(recvbuf, "%d %d %d", &lr, &pr, &er);
+		cout << "属性\t" << "等级\t" << "关卡\t" << "经验\t" << endl;
 		cout << "排名\t" << lr << "\t" << pr << "\t" << er << "\t" << endl;
 	}
 	else
 	{
 		int lr = 0, wr = 0, i = 0;
-		for (; i < dLevelRanking.size() && (lr == 0 || wr == 0); i++)
+		/*for (; i < dLevelRanking.size() && (lr == 0 || wr == 0); i++)
 		{
-			if (dLevelRanking[i] == n) lr = i + 1;
-			if (puzzleRanking[i] == n) wr = i + 1;
+		if (dLevelRanking[i] == n) lr = i + 1;
+		if (puzzleRanking[i] == n) wr = i + 1;
 		}
-		if (lr == 0 || wr == 0) return false;
-		cout <<"属性\t" << "等级\t" << "出题数\t" << endl;
+		if (lr == 0 || wr == 0) return false;*/
+		recv(currentSocket, recvbuf, DEFAULT_BUFLEN, 0);
+		sscanf(recvbuf, "%d %d", &lr, &wr);
+		cout << "属性\t" << "等级\t" << "出题数\t" << endl;
 		cout << "排名\t" << lr << "\t" << wr << "\t" << endl;
 	}
 	return true;
@@ -240,11 +255,17 @@ void designer::refreshInfo(int d)
 
 bool designer::showInfo()
 {
+	char n[20];
+	int l, p;
 	cout << "姓名\t" << "等级\t" << "出题数" << endl;
-	cout << name << "\t" << level << "\t" << puzzle << endl;
+	
+	recv(currentSocket, recvbuf, DEFAULT_BUFLEN, 0);
+	sscanf(recvbuf, "%s %d %d", n, &l, &p);
+	cout << n << "\t" << l << "\t" << p << endl;
+
 	cout << endl;
 
-	rank(name, DESIGN);
+	rank(n, DESIGN);
 	cout << "**************************************************************" << endl;
 	return true;
 }

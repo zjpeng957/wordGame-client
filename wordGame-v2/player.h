@@ -2,7 +2,12 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <WinSock2.h>
+#include <Windows.h>
+#include <WS2tcpip.h>
+#define DEFAULT_BUFLEN 512
 using namespace std;
+
 const int EXP_PER_PASS = 100;
 const int MAX_LEVEL = 100;
 enum Mode { CHALLENGE, DESIGN, FAIL };
@@ -36,6 +41,7 @@ public:
 	virtual string design(vector<string> &vocabulary) { return string(); }
 	static void allRankInit();
 	static void saveAllRank();
+	void setSocket(SOCKET cSocket) { currentSocket = cSocket; }
 protected:
 	string name;
 	string password;
@@ -43,6 +49,8 @@ protected:
 	map<string, player*> *clgInfo;
 	map<string, player*> *dsInfo;
 	int level;
+	SOCKET currentSocket;
+	char recvbuf[512];
 	static vector<string> cLevelRanking;
 	static vector<string> dLevelRanking;
 	static vector<string> expRanking;

@@ -134,6 +134,7 @@ Mode game::Login()
 						int puzzle;
 						sscanf(recvbuf, "%s %s %d %d", n, p, &level, &puzzle);
 					}
+					currentPlayer->setSocket(ConnectSocket);
 					return Mode(stoi(type));
 				}
 				else
@@ -231,6 +232,7 @@ Mode game::Register()
 			{
 				currentPlayer = new designer(name, pw);
 			}
+			currentPlayer->setSocket(ConnectSocket);
 			return Mode(stoi(type));
 		}
 	}
@@ -300,6 +302,7 @@ int game::challengeUi()
 		cout << "请选择：0.开始游戏\t1.查看排名\t2.查找用户\t3.注销\t4.退出" << endl;
 		cin >> choice;
 	}
+	send(ConnectSocket, choice.c_str(), choice.size() + 1, 0);
 	if (choice == "3")
 	{
 		send(ConnectSocket, choice.c_str(), choice.size() + 1, 0);
@@ -428,6 +431,7 @@ void game::search()
 	cout << "**********************查 找 用 户**********************" << endl;
 	cout << "类型(0.闯关者\t1.出题者\t2.返回):";
 	cin >> choice;
+	send(ConnectSocket, choice.c_str(), choice.size() + 1, 0);
 	while (choice!="2")
 	{
 		if (choice == "0")
@@ -439,26 +443,31 @@ void game::search()
 				cout << "请输入属性(0.姓名\t1.等级\t2.闯关数\t3.经验):";
 				cin >> aChoice;
 			}
+			send(ConnectSocket, choice.c_str(), choice.size() + 1, 0);
 			switch (stoi(aChoice))
 			{
 			case 0:
 				cout << "姓名:";
 				cin >> attr;
+				send(ConnectSocket, attr.c_str(), attr.size() + 1, 0);
 				searchChallenger(attr, -1, -1, -1);
 				break;
 			case 1:
 				cout << "等级:";
 				cin >> attr;
+				send(ConnectSocket, attr.c_str(), attr.size() + 1, 0);
 				searchChallenger(string(), stoi(attr), -1, -1);
 				break;
 			case 2:
 				cout << "闯关数:";
 				cin >> attr;
+				send(ConnectSocket, attr.c_str(), attr.size() + 1, 0);
 				searchChallenger(string(), -1, stoi(attr), -1);
 				break;
 			case 3:
 				cout << "经验:";
 				cin >> attr;
+				send(ConnectSocket, attr.c_str(), attr.size() + 1, 0);
 				searchChallenger(string(), -1, -1, stoi(attr));
 				break;
 			default:
@@ -469,26 +478,31 @@ void game::search()
 		{
 			cout << "属性(0.姓名\t1.等级\t2.出题数):";
 			cin >> aChoice;
+
 			while (aChoice != "0"&&aChoice != "1"&&aChoice != "2")
 			{
 				cout << "请输入属性(0.姓名\t1.等级\t2.出题数):";
 				cin >> aChoice;
 			}
+			send(ConnectSocket, aChoice.c_str(), aChoice.size() + 1, 0);
 			switch (stoi(aChoice))
 			{
 			case 0:
 				cout << "姓名:";
 				cin >> attr;
+				send(ConnectSocket, attr.c_str(), attr.size() + 1, 0);
 				searchDesigner(attr, -1, -1);
 				break;
 			case 1:
 				cout << "等级:";
 				cin >> attr;
+				send(ConnectSocket, attr.c_str(), attr.size() + 1, 0);
 				searchDesigner(string(), stoi(attr), -1);
 				break;
 			case 2:
 				cout << "出题数:";
 				cin >> attr;
+				send(ConnectSocket, attr.c_str(), attr.size() + 1, 0);
 				searchDesigner(string(), -1, stoi(attr));
 				break;
 			default:
@@ -497,13 +511,14 @@ void game::search()
 		}
 		cout << "类型(0.闯关者\t1.出题者\t2.返回):";
 		cin >> choice;
+		send(ConnectSocket, attr.c_str(), attr.size() + 1, 0);
 	}
 	cout << "******************************************************" << endl;
 }
 
 void game::searchChallenger(string name, int level, int exp, int pass)
 {
-	auto begin = ChallengerInfo.begin(), end = ChallengerInfo.end();
+	/*auto begin = ChallengerInfo.begin(), end = ChallengerInfo.end();
 	bool flag = false;
 	if (name != string())
 	{
@@ -557,12 +572,24 @@ void game::searchChallenger(string name, int level, int exp, int pass)
 			begin++;
 		}
 	}
-	if (!flag) cout << "用户不存在！" << endl;
+	if (!flag) cout << "用户不存在！" << endl;*/
+	int flag = 0, found = 0;
+	challenger foundChallenger;
+	recv(ConnectSocket, recvbuf, DEFAULT_BUFLEN, 0);
+	sscanf(recvbuf, "%d", &found);
+	while (found)
+	{
+		foundChallenger.showInfo();
+		flag = 1;
+		recv(ConnectSocket, recvbuf, DEFAULT_BUFLEN, 0);
+		sscanf(recvbuf, "%d", &found);
+	}
+	if (flag == 0) cout << "用户不存在！" << endl;
 }
 
 void game::searchDesigner(string name, int level, int wordCount)
 {
-	auto begin = designerInfo.begin(), end = designerInfo.end();
+	/*auto begin = designerInfo.begin(), end = designerInfo.end();
 	bool flag = false;
 	if (name != string())
 	{
@@ -604,7 +631,19 @@ void game::searchDesigner(string name, int level, int wordCount)
 			begin++;
 		}
 	}
-	if (!flag) cout << "用户不存在！" << endl;
+	if (!flag) cout << "用户不存在！" << endl;*/
+	int flag = 0, found = 0;
+	designer foundDesigner;
+	recv(ConnectSocket, recvbuf, DEFAULT_BUFLEN, 0);
+	sscanf(recvbuf, "%d", &found);
+	while (found)
+	{
+		foundDesigner.showInfo();
+		flag = 1;
+		recv(ConnectSocket, recvbuf, DEFAULT_BUFLEN, 0);
+		sscanf(recvbuf, "%d", &found);
+	}
+	if (flag == 0) cout << "用户不存在！" << endl;
 }
 
 int game::designUi()
@@ -613,6 +652,7 @@ int game::designUi()
 	cout << "*************************出 题 者 界 面*************************" << endl;
 	cout << "请选择：0.出题\t1.查看排名\t2.查找用户\t3.注销\t4.退出" << endl;
 	cin >> choice;
+	send(ConnectSocket, choice.c_str(), choice.size() + 1, 0);
 	while (choice != "4" && choice != "3")
 	{
 		if (choice == "0") design();
@@ -621,6 +661,7 @@ int game::designUi()
 
 		cout << "请选择：0.出题\t1.查看排名\t2.查找用户\t3.注销\t4.退出" << endl;
 		cin >> choice;
+		send(ConnectSocket, choice.c_str(), choice.size() + 1, 0);
 	}
 	if (choice == "3")
 	{
@@ -638,9 +679,10 @@ void game::design()
 	cout << "*************************出 题*************************" << endl;
 	cout << "输入要添加的新词（输入!q停止出题）:";
 	cin >> word;
+	send(ConnectSocket, word.c_str(), word.size() + 1, 0);
 	while (word != "!q")
 	{
-		auto &list = vocabulary[word.size()];
+		/*auto &list = vocabulary[word.size()];
 		if (list.size() == 0)
 		{
 			list.push_back(word);
@@ -651,7 +693,9 @@ void game::design()
 			{
 				if (list[i] == word) flag = 0;
 			}
-		}
+		}*/
+		recv(ConnectSocket, recvbuf, DEFAULT_BUFLEN, 0);
+		sscanf(recvbuf, "%d", &flag);
 		if (flag)
 		{
 			cout << "添加成功！" << endl;
@@ -662,6 +706,7 @@ void game::design()
 
 		cout << "输入要添加的新词（输入!q停止出题）:";
 		cin >> word;
+		send(ConnectSocket, word.c_str(), word.size() + 1, 0);
 	}
 	system("cls");
 	currentPlayer->showInfo();
