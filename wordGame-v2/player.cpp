@@ -7,9 +7,9 @@ vector<string> player::cLevelRanking = vector<string>();
 vector<string> player::dLevelRanking = vector<string>();
 vector<string> player::expRanking = vector<string>();
 vector<string> player::passRanking = vector<string>();
-vector<string> player::wordRanking = vector<string>();
+vector<string> player::puzzleRanking = vector<string>();
 vector<int> challenger::levelExp = vector<int>();
-vector<int> designer::levelWord = vector<int>();
+vector<int> designer::levelPuzzle = vector<int>();
 player::player(const player & p):name(p.name),password(p.password),level(p.level),clgInfo(p.clgInfo),dsInfo(p.dsInfo)
 {
 
@@ -68,12 +68,12 @@ challenger::~challenger()
 
 
 
-bool challenger::solve(string word)
+bool challenger::solve(string puzzle)
 {
 	string ans;
 	cin >> ans;
-	if (ans != word) cout << "错误！" << endl;
-	return ans==word;
+	if (ans != puzzle) cout << "错误！" << endl;
+	return ans==puzzle;
 }
 
 bool challenger::rank(string n, Mode m)
@@ -97,7 +97,7 @@ bool challenger::rank(string n, Mode m)
 		for (; i < dLevelRanking.size() && (lr == 0 || wr == 0); i++)
 		{
 			if (dLevelRanking[i] == n) lr = i + 1;
-			if (wordRanking[i] == n) wr = i + 1;
+			if (puzzleRanking[i] == n) wr = i + 1;
 		}
 		if (lr == 0 || wr == 0) return false;
 		cout << "属性\t" << "等级\t" << "出题数\t" << endl;
@@ -157,7 +157,7 @@ int player::getAttr(ATTR a)
 		break;
 	case EXP:return getExp();
 		break;
-	case WORD:return getWord();
+	case PUZZLE:return getPuzzle();
 		break;
 	default:return 0;
 		break;
@@ -170,7 +170,7 @@ void player::allRankInit()
 	player::rankInit(dLevelRanking, "dLevel.txt");
 	player::rankInit(passRanking, "pass.txt");
 	player::rankInit(expRanking, "exp.txt");
-	player::rankInit(wordRanking, "word.txt");
+	player::rankInit(puzzleRanking, "puzzle.txt");
 }
 
 void player::saveAllRank()
@@ -179,7 +179,7 @@ void player::saveAllRank()
 	saveRank(dLevelRanking, "dLevel.txt");
 	saveRank(passRanking, "pass.txt");
 	saveRank(expRanking, "exp.txt");
-	saveRank(wordRanking, "word.txt");
+	saveRank(puzzleRanking, "puzzle.txt");
 }
 
 void player::attrReRank(vector<string>& ranking, int attr,Mode m,ATTR a)
@@ -223,7 +223,7 @@ bool designer::rank(string n, Mode m)
 		for (; i < dLevelRanking.size() && (lr == 0 || wr == 0); i++)
 		{
 			if (dLevelRanking[i] == n) lr = i + 1;
-			if (wordRanking[i] == n) wr = i + 1;
+			if (puzzleRanking[i] == n) wr = i + 1;
 		}
 		if (lr == 0 || wr == 0) return false;
 		cout <<"属性\t" << "等级\t" << "出题数\t" << endl;
@@ -234,14 +234,14 @@ bool designer::rank(string n, Mode m)
 
 void designer::refreshInfo(int d)
 {
-	word += d;
-	if (level < MAX_LEVEL&&word >= levelWord[level + 1]) level++;
+	puzzle += d;
+	if (level < MAX_LEVEL&&puzzle >= levelPuzzle[level + 1]) level++;
 }
 
 bool designer::showInfo()
 {
 	cout << "姓名\t" << "等级\t" << "出题数" << endl;
-	cout << name << "\t" << level << "\t" << word << endl;
+	cout << name << "\t" << level << "\t" << puzzle << endl;
 	cout << endl;
 
 	rank(name, DESIGN);
@@ -252,12 +252,12 @@ bool designer::showInfo()
 void designer::reRank()
 {
 	attrReRank(dLevelRanking, level,DESIGN,LEVEL);
-	attrReRank(wordRanking, word, DESIGN,WORD);
+	attrReRank(puzzleRanking, puzzle, DESIGN,PUZZLE);
 }
 
 
 void designer::addDesigner(string n)
 {
 	player::dLevelRanking.push_back(n);
-	player::wordRanking.push_back(n);
+	player::puzzleRanking.push_back(n);
 }
