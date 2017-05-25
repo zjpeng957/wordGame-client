@@ -33,7 +33,7 @@ public:
 	void getAllUser(map<string, player*> *pclg, map<string, player*> *pds) { clgInfo = pclg, dsInfo = pds; }
 	virtual bool rank(string n,Mode m) = 0;
 	virtual bool showInfo(char recvbuf[]) = 0;
-	//virtual void levelInc(int exp) = 0;
+	
 	virtual void reRank() = 0;
 	virtual void refreshInfo(int d) = 0;
 	virtual int getAttr(ATTR a);
@@ -75,7 +75,7 @@ public:
 	bool rank(string n,Mode m);
 	bool showInfo(char recvbuf[]);
 	void reRank();
-	//void levelInc(int dExp);
+	
 	void refreshInfo(int d);
 	static void addChallenger(string n);
 	static void levelExpInit();
