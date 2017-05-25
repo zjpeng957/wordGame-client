@@ -89,8 +89,8 @@ bool challenger::rank(string n, Mode m)
 			if (expRanking[i] == n) er = i + 1;
 		}
 		if (lr == 0 || pr == 0 || er == 0) return false;*/
-		recv(currentSocket, recvbuf, DEFAULT_BUFLEN, 0);
-		sscanf(recvbuf, "%d %d %d", &lr, &pr, &er);
+		//recv(currentSocket, recvbuf, DEFAULT_BUFLEN, 0);
+		//sscanf(recvbuf, "%d %d %d", &lr, &pr, &er);
 		cout << "属性\t" << "等级\t" << "关卡\t" << "经验\t" << endl;
 		cout << "排名\t" << lr << "\t" << pr << "\t" << er << "\t" << endl;
 	}
@@ -103,15 +103,15 @@ bool challenger::rank(string n, Mode m)
 			if (puzzleRanking[i] == n) wr = i + 1;
 		}
 		if (lr == 0 || wr == 0) return false;*/
-		recv(currentSocket, recvbuf, DEFAULT_BUFLEN, 0);
-		sscanf(recvbuf, "%d %d", &lr, &wr);
+		//recv(currentSocket, recvbuf, DEFAULT_BUFLEN, 0);
+		//sscanf(recvbuf, "%d %d", &lr, &wr);
 		cout << "属性\t" << "等级\t" << "出题数\t" << endl;
 		cout << "排名\t" << lr << "\t" << wr << "\t" << endl;
 	}
 	return true;
 }
 
-bool challenger::showInfo()
+bool challenger::showInfo(char recvbuf[])
 {
 	char n[20];
 	int l, p, e;
@@ -123,7 +123,7 @@ bool challenger::showInfo()
 
 	cout << endl;
 
-	rank(n, CHALLENGE);
+	//rank(n, CHALLENGE);
 	cout << "**************************************************************" << endl;
 	return true;
 }
@@ -253,7 +253,7 @@ void designer::refreshInfo(int d)
 	if (level < MAX_LEVEL&&puzzle >= levelPuzzle[level + 1]) level++;
 }
 
-bool designer::showInfo()
+bool designer::showInfo(char recvbuf[])
 {
 	char n[20];
 	int l, p;
@@ -261,11 +261,12 @@ bool designer::showInfo()
 	
 	recv(currentSocket, recvbuf, DEFAULT_BUFLEN, 0);
 	sscanf(recvbuf, "%s %d %d", n, &l, &p);
+	//if (n[0] == '!') return false;
 	cout << n << "\t" << l << "\t" << p << endl;
 
 	cout << endl;
 
-	rank(n, DESIGN);
+	//rank(n, DESIGN);
 	cout << "**************************************************************" << endl;
 	return true;
 }

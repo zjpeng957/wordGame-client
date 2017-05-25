@@ -32,12 +32,12 @@ private:
 	void challenge();//闯关者进行游戏
 	void rank();//查看排名
 	void search();//查找玩家
-	void searchChallenger(string name, int level, int exp, int pass);//查找闯关者
+	bool searchChallenger(string name, int level, int exp, int pass);//查找闯关者
 	void searchDesigner(string name, int level, int word);//查找出题者
 	int designUi();//出题者界面
 	void design();//出题者出题
-	
-
+	void match();
+	void fight();
 	//加载闯关者，出题者和题目数据
 	void loadChallenger();
 	void loadDesigner();

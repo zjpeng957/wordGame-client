@@ -32,7 +32,7 @@ public:
 	virtual int getPuzzle() const { return 0; }
 	void getAllUser(map<string, player*> *pclg, map<string, player*> *pds) { clgInfo = pclg, dsInfo = pds; }
 	virtual bool rank(string n,Mode m) = 0;
-	virtual bool showInfo() = 0;
+	virtual bool showInfo(char recvbuf[]) = 0;
 	//virtual void levelInc(int exp) = 0;
 	virtual void reRank() = 0;
 	virtual void refreshInfo(int d) = 0;
@@ -73,7 +73,7 @@ public:
 	int getExp() const { return exp; }
 	bool solve(string puzzle);
 	bool rank(string n,Mode m);
-	bool showInfo();
+	bool showInfo(char recvbuf[]);
 	void reRank();
 	//void levelInc(int dExp);
 	void refreshInfo(int d);
@@ -102,7 +102,7 @@ public:
 	bool rank(string n, Mode m);
 
 	void refreshInfo(int d);
-	bool showInfo();
+	bool showInfo(char recvbuf[]);
 	void reRank();
 
 	int getPuzzle() const { return puzzle; }
