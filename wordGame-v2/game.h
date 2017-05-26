@@ -36,7 +36,7 @@ private:
 	void searchDesigner(string name, int level, int word);//查找出题者
 	int designUi();//出题者界面
 	void design();//出题者出题
-	void match();
+	void match(string name);
 	void fight();
 	//加载闯关者，出题者和题目数据
 	void loadChallenger();
@@ -58,6 +58,7 @@ private:
 	map<int, vector<string>> vocabulary;//题目（单词）表
 	SOCKET ConnectSocket;
 	bool connectSucceed;
+	string opponent;
 	char recvbuf[DEFAULT_BUFLEN];
 };
 

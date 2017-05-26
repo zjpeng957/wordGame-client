@@ -1,6 +1,7 @@
 #include "player.h"
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 using namespace std;
 
 vector<string> player::cLevelRanking = vector<string>();
@@ -114,16 +115,15 @@ bool challenger::rank(string n, Mode m)
 bool challenger::showInfo(char recvbuf[])
 {
 	char n[20];
-	int l, p, e;
-	cout << "姓名\t" << "等级\t" << "闯关数\t" << "经验" << endl;
+	int l, p, e,r;
+	cout << "姓名"<< setw(10)<< "等级" << setw(10) << "闯关数" << setw(10) << "经验" << setw(10) <<"排名" << endl;
 	
 	recv(currentSocket, recvbuf, DEFAULT_BUFLEN, 0);
-	sscanf(recvbuf, "%s %d %d %d", n, &l, &p, &e);
-	cout << n << "\t" << l << "\t" << p << "\t" << e << "\t" << endl;
+	sscanf(recvbuf, "%s %d %d %d %d", n, &l, &p, &e,&r);
+	cout << n << setw(10) << l << setw(10) << p << setw(10) << e << setw(10) <<r << endl;
 
 	cout << endl;
 
-	//rank(n, CHALLENGE);
 	cout << "**************************************************************" << endl;
 	return true;
 }
@@ -227,7 +227,7 @@ bool designer::rank(string n, Mode m)
 		if (lr == 0 || pr == 0 || er == 0) return false;*/
 		recv(currentSocket, recvbuf, DEFAULT_BUFLEN, 0);
 		sscanf(recvbuf, "%d %d %d", &lr, &pr, &er);
-		cout << "属性\t" << "等级\t" << "关卡\t" << "经验\t" << endl;
+		cout << "属性" << "等级" << "关卡" << "经验" << endl;
 		cout << "排名\t" << lr << "\t" << pr << "\t" << er << "\t" << endl;
 	}
 	else
@@ -256,13 +256,13 @@ void designer::refreshInfo(int d)
 bool designer::showInfo(char recvbuf[])
 {
 	char n[20];
-	int l, p;
-	cout << "姓名\t" << "等级\t" << "出题数" << endl;
+	int l, p,r;
+	cout << "姓名"<< setw(10) << "等级" << setw(10) << "出题数" << setw(10) <<"排名" << endl;
 	
 	recv(currentSocket, recvbuf, DEFAULT_BUFLEN, 0);
-	sscanf(recvbuf, "%s %d %d", n, &l, &p);
+	sscanf(recvbuf, "%s %d %d %d", n, &l, &p,&r);
 	//if (n[0] == '!') return false;
-	cout << n << "\t" << l << "\t" << p << endl;
+	cout << n << setw(10) << l << setw(10) << p << setw(10) << r << endl;
 
 	cout << endl;
 
